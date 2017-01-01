@@ -1,46 +1,49 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script>
-function addresssubmit() {
-    var zip = document.getElementById("zip").value;
-	var city = document.getElementById("city").value;
-	var address = document.getElementById("address").value;
-	var search = address+" "+zip;
-	if (city!="" && zip ==""){
-		search = address+" "+city;
-	}
-    if (city=="" && zip == "") {
-        alert("City or Zip Code must be filled out");
-        return false;
-    }
-    if (address == "") {
-        alert("Address will give more accuracy");
-		search = zip;
-    }
-	
-	search = search.replace(/\s+/g, '+');
-	alert(search)
-	window.open("http://maps.legis.wisconsin.gov/results.aspx?Address="+search+"&single=y")
-}
-</script>
-
+    <title>Address Input</title>
 </head>
 <body>
-<!--<p>
-	<form name="myForm" action="index.html"
-		onsubmit="return validateForm()" method="post">
-		Name: <input type="text" name="fname">
-		<input type="submit" value="Submit">
-	</form>
-</p>-->
-<p>
-	<form id="form" onsubmit="return false;">
-    	<label>Address:</label><input type="text" id="address" />
-		<Label>City:</Label><input type="text" id="city" />
-		<Label>ZIP Code:</Label><input type="text" pattern="[0-9]{5}" title="Five digit zip code" id="zip" />
-    	<input type="submit" value="popup" onclick="addresssubmit();" />
-	</form>
-</p>
+	<script src="../assets/js/jquery.min.js"></script>
+	<script>
+	function addresssubmit() { //this function takes the form information
+    	var zip = document.getElementById("zip").value;
+		var city = document.getElementById("city").value;
+		var address = document.getElementById("address").value;
+		var search = address+" "+zip; //starts with assumming addess and zip
+		if (city!="" && zip ==""){ //to see if we should use address and city
+			search = address+" "+city;
+		}
+    	if (city=="" && zip == "") { //tells the user to fill in city or zip
+        	alert("City or Zip Code must be filled out");
+        	return false;
+		}
+		if (address == "") { //tells the user that using the address will be more accurate
+			alert("Address will give more accuracy");
+			search = zip; //without address, it will just search zip
+			if(zip==""){
+				search = city; //without address or zip, it will just search city
+			}
+		}
+	
+		search = search.replace(/\s+/g, '+'); //removes spaces in string and changes it to +s
+		//alert(search);
+		var website = "http://maps.legis.wisconsin.gov/results.aspx?Address="+search+"&single=y";
+		alert(website);
+		//my attempt at downloading html source
+		$.get( "index.html", function( data ) {
+		  alert( "Data Loaded: " + data );
+		});
+
+	}
+	</script>
+	<p>
+		<form id="form" onsubmit="return false;">
+    		<label>Address:</label><input type="text" id="address" />
+			<Label>City:</Label><input type="text" id="city" />
+			<Label>ZIP Code:</Label><input type="text" pattern="[0-9]{5}" title="Five digit zip code" id="zip" />
+    		<input type="submit" value="popup" onclick="addresssubmit();" />
+		</form>
+	</p>
 </body>
 </html>
